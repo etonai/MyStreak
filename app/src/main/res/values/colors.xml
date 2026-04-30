@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Material theme seeds -->
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+
+    <!-- Calendar activity level colors -->
+    <color name="calendar_light_blue">#90CAF9</color>
+    <color name="calendar_medium_blue">#42A5F5</color>
+    <color name="calendar_dark_blue">#1565C0</color>
+    <color name="calendar_bright_green">#00E676</color>
+    <color name="calendar_today_ring">#FFCC00</color>
+
+    <!-- Task color palette (12 colors) -->
+    <color name="task_red">#EF5350</color>
+    <color name="task_pink">#EC407A</color>
+    <color name="task_purple">#AB47BC</color>
+    <color name="task_deep_purple">#7E57C2</color>
+    <color name="task_indigo">#5C6BC0</color>
+    <color name="task_blue">#42A5F5</color>
+    <color name="task_cyan">#26C6DA</color>
+    <color name="task_teal">#26A69A</color>
+    <color name="task_green">#66BB6A</color>
+    <color name="task_amber">#FFCA28</color>
+    <color name="task_orange">#FFA726</color>
+    <color name="task_brown">#8D6E63</color>
+</resources>

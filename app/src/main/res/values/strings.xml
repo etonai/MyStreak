@@ -1,0 +1,82 @@
+<resources>
+    <string name="app_name">MyStreak</string>
+
+    <!-- Bottom nav tabs -->
+    <string name="tab_dashboard">Dashboard</string>
+    <string name="tab_calendar">Calendar</string>
+    <string name="tab_tasks">Tasks</string>
+
+    <!-- Dashboard -->
+    <string name="streak_days">%d days</string>
+    <string name="streak_label">Current Streak</string>
+    <string name="today_activities">Today</string>
+    <string name="yesterday_activities">Yesterday</string>
+    <string name="week_summary_label">Week Summary</string>
+    <string name="week_summary_text">%d activities (%d high priority) in the last 7 days</string>
+    <string name="high_priority_outstanding">High Priority Outstanding</string>
+    <string name="no_activities_today">No activities logged today.</string>
+    <string name="no_activities_yesterday">No activities logged yesterday.</string>
+    <string name="all_high_priority_done">All high priority tasks done!</string>
+    <string name="add_activity">Add Activity</string>
+
+    <!-- Tasks tab -->
+    <string name="add_task">Add Task</string>
+    <string name="sort_alphabetical">A–Z</string>
+    <string name="sort_recent">Recent</string>
+    <string name="sort_count">Count</string>
+    <string name="no_tasks">No tasks yet. Tap + to add one.</string>
+    <string name="today_count">%d today</string>
+    <string name="inactive_label">Inactive</string>
+
+    <!-- Task detail / add / edit -->
+    <string name="task_name_hint">Task name</string>
+    <string name="task_color_label">Color</string>
+    <string name="task_priority_label">Priority</string>
+    <string name="priority_high">High</string>
+    <string name="priority_low">Low</string>
+    <string name="min_success_hint">Minimum success (required to log)</string>
+    <string name="med_success_hint">Medium success</string>
+    <string name="high_success_hint">High success</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="log_activity">Log Activity</string>
+    <string name="active">Active</string>
+    <string name="inactive">Inactive</string>
+    <string name="recent_activity">Recent Activity</string>
+    <string name="no_activity_history">No activity logged yet.</string>
+    <string name="delete_task_title">Delete Task?</string>
+    <string name="delete_task_message">This will permanently delete this task and all of its history. This cannot be undone.</string>
+
+    <!-- Logging -->
+    <string name="select_task">Select Task</string>
+    <string name="select_success_level">How did you do?</string>
+    <string name="minimum">Minimum</string>
+    <string name="medium">Medium</string>
+    <string name="high">High</string>
+    <string name="log_summary_title">Log Activity</string>
+    <string name="cancel">Cancel</string>
+    <string name="back">Back</string>
+
+    <!-- Activity edit -->
+    <string name="edit_activity_title">Edit Activity</string>
+    <string name="delete_activity_title">Delete Activity?</string>
+    <string name="delete_activity_message">This will permanently delete this activity entry.</string>
+    <string name="confirm">Confirm</string>
+    <string name="date_time_label">Date &amp; Time</string>
+    <string name="success_level_label">Success Level</string>
+    <string name="future_date_error">Date cannot be in the future.</string>
+
+    <!-- Calendar -->
+    <string name="no_activities_this_day">No activities logged this day.</string>
+
+    <!-- Import / Export -->
+    <string name="export">Export Data</string>
+    <string name="import_data">Import Data</string>
+    <string name="import_warning_title">Replace All Data?</string>
+    <string name="import_warning_message">Importing will replace all existing tasks and activities. This cannot be undone.</string>
+    <string name="export_success">Data exported successfully.</string>
+    <string name="export_error">Export failed: %s</string>
+    <string name="import_success">Imported %d tasks and %d activities.</string>
+    <string name="import_error">Import failed: %s</string>
+    <string name="import_invalid_file">Invalid file format.</string>
+</resources>
