@@ -125,11 +125,11 @@ PlayStreak's `item_timeline_activity.xml` uses `MaterialCardView` with `cardElev
 1. **Calendar library migration (kizitonwose)**
    PlayStreak uses the `kizitonwose/calendar-view` library for its calendar grid, which provides built-in month paging, day binders, and week-of-day headers. MyStreak uses a custom `RecyclerView` grid with `SquareCellDecoration`. The visual output can be matched without switching libraries, but the kizitonwose library would make future calendar work (e.g., week view, month paging animation) easier.
    Recommendation: defer to a future DevCycle. DC-2 achieves visual alignment without an architecture change.
-
+OK
 2. **Piece list item simplicity vs. Task item richness**
    PlayStreak's `item_piece.xml` is a single `TextView` (plain text row, 16sp, 32dp start padding). MyStreak's `item_task.xml` is a `MaterialCardView` with color dot, name, priority badge, today count, and a log button. The richer Task card is intentional and correct per the MyStreak design spec — Tasks have more metadata than Pieces.
    Recommendation: keep the existing Task card design. Phase 4 aligns the Tasks tab *frame* (sort control card) without changing the item itself.
-
+OK
 ---
 
 ## Notes and Risks
