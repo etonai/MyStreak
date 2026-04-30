@@ -10,7 +10,10 @@
     <string name="streak_days">%d days</string>
     <string name="streak_label">Current Streak</string>
     <string name="today_activities">Today</string>
+    <string name="today_header">Today (%d activities):</string>
     <string name="yesterday_activities">Yesterday</string>
+    <string name="yesterday_header">Yesterday (%d activities):</string>
+    <string name="week_summary_header">Week Summary</string>
     <string name="week_summary_label">Week Summary</string>
     <string name="week_summary_text">%d activities (%d high priority) in the last 7 days</string>
     <string name="high_priority_outstanding">High Priority Outstanding</string>

@@ -96,13 +96,15 @@ class DashboardFragment : Fragment() {
         viewModel.todayActivities.observe(viewLifecycleOwner) { list ->
             todayAdapter.submitList(list)
             binding.tvNoToday.isVisible = list.isEmpty()
+            binding.tvTodayHeader.text = getString(R.string.today_header, list.size)
         }
         viewModel.yesterdayActivities.observe(viewLifecycleOwner) { list ->
             yesterdayAdapter.submitList(list)
             binding.tvNoYesterday.isVisible = list.isEmpty()
+            binding.tvYesterdayHeader.text = getString(R.string.yesterday_header, list.size)
         }
         viewModel.streak.observe(viewLifecycleOwner) { count ->
-            binding.tvStreakCount.text = getString(R.string.streak_days, count)
+            binding.tvStreakCount.text = if (count > 0) "${count} days 🔥" else "0 days"
         }
         viewModel.weekSummary.observe(viewLifecycleOwner) { (total, high) ->
             binding.tvWeekSummary.text = getString(R.string.week_summary_text, total, high)
