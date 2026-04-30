@@ -1,6 +1,7 @@
 package com.mystreak.app.ui.tasks.detail
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -10,7 +11,8 @@ import com.mystreak.app.databinding.ItemActivityBinding
 import com.mystreak.app.util.DateUtils
 
 class ActivityHistoryAdapter(
-    private val onClick: (TaskActivity) -> Unit
+    private val onEdit: (TaskActivity) -> Unit,
+    private val onDelete: (TaskActivity) -> Unit
 ) : ListAdapter<TaskActivity, ActivityHistoryAdapter.VH>(DIFF) {
 
     inner class VH(val binding: ItemActivityBinding) : RecyclerView.ViewHolder(binding.root)
@@ -22,11 +24,11 @@ class ActivityHistoryAdapter(
     override fun onBindViewHolder(holder: VH, position: Int) {
         val activity = getItem(position)
         with(holder.binding) {
-            viewActivityColor.visibility = android.view.View.GONE
-            tvActivityTaskName.text = DateUtils.formatDateTime(activity.timestamp)
+            tvActivityTime.text = DateUtils.formatDateTime(activity.timestamp)
+            tvActivityTaskName.visibility = View.GONE
             tvActivityLevel.text = activity.successLevel.name.lowercase().replaceFirstChar { it.uppercase() }
-            tvActivityTime.text = ""
-            root.setOnClickListener { onClick(activity) }
+            btnEdit.setOnClickListener { onEdit(activity) }
+            btnDelete.setOnClickListener { onDelete(activity) }
         }
     }
 

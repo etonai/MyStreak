@@ -32,6 +32,13 @@ class CalendarViewModel(private val repo: MyStreakRepository) : ViewModel() {
             .map { (cache, year, month) -> buildCells(cache, year, month) }
             .asLiveData()
 
+    private val _monthlyStats = MutableLiveData(Pair(0, 0))
+    val monthlyStats: LiveData<Pair<Int, Int>> = _monthlyStats
+
+    init {
+        refreshMonthlyStats()
+    }
+
     private fun buildCells(
         cache: List<CalendarDayCache>,
         year: Int,
@@ -67,6 +74,7 @@ class CalendarViewModel(private val repo: MyStreakRepository) : ViewModel() {
         val prev = LocalDate.of(y, m, 1).minusMonths(1)
         _displayYear.value = prev.year
         _displayMonth.value = prev.monthValue
+        refreshMonthlyStats()
     }
 
     fun goToNextMonth() {
@@ -75,6 +83,15 @@ class CalendarViewModel(private val repo: MyStreakRepository) : ViewModel() {
         val next = LocalDate.of(y, m, 1).plusMonths(1)
         _displayYear.value = next.year
         _displayMonth.value = next.monthValue
+        refreshMonthlyStats()
+    }
+
+    fun refreshMonthlyStats() {
+        viewModelScope.launch {
+            val y = _displayYear.value ?: return@launch
+            val m = _displayMonth.value ?: return@launch
+            _monthlyStats.value = repo.getMonthlyStats(y, m)
+        }
     }
 
     fun refreshTodayColor(onColor: (CalendarColorLevel) -> Unit) {

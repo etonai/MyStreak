@@ -5,6 +5,7 @@ import com.mystreak.app.data.model.*
 import com.mystreak.app.util.DateUtils
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import java.time.LocalDate
 
 class MyStreakRepository(private val db: MyStreakDatabase) {
 
@@ -33,6 +34,13 @@ class MyStreakRepository(private val db: MyStreakDatabase) {
     }
 
     suspend fun getAllActivitiesOnce(): List<TaskActivity> = db.taskActivityDao().getAllOnce()
+
+    suspend fun getAllTimestampsOnce(): List<Long> = db.taskActivityDao().getAllTimestampsOnce()
+
+    fun observeTaskActivityStats(): Flow<List<TaskActivityStats>> {
+        val (start, end) = DateUtils.dayBounds(DateUtils.todayEpochDay())
+        return db.taskActivityDao().observeTaskActivityStats(start, end)
+    }
 
     suspend fun getActivityWithTaskByIdOnce(id: Long): ActivityWithTask? =
         db.taskActivityDao().getWithTaskByIdOnce(id)
@@ -73,6 +81,16 @@ class MyStreakRepository(private val db: MyStreakDatabase) {
         return allHighActive.filter { task ->
             db.taskActivityDao().getFirstActivityForTaskOnDay(task.id, start, end) == null
         }
+    }
+
+    suspend fun getMonthlyStats(year: Int, month: Int): Pair<Int, Int> {
+        val firstDay = LocalDate.of(year, month, 1)
+        val start = DateUtils.dayBounds(firstDay.toEpochDay()).first
+        val end = DateUtils.dayBounds(firstDay.plusMonths(1).toEpochDay()).first
+        val timestamps = db.taskActivityDao().getTimestampsInRange(start, end)
+        val total = timestamps.size
+        val activeDays = timestamps.map { DateUtils.timestampToEpochDay(it) }.toSet().size
+        return Pair(activeDays, total)
     }
 
     // --- Calendar cache ---

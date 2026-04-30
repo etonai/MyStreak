@@ -12,7 +12,8 @@ import com.mystreak.app.util.ColorUtils
 import com.mystreak.app.util.DateUtils
 
 class ActivityListAdapter(
-    private val onClick: (ActivityWithTask) -> Unit
+    private val onEdit: (ActivityWithTask) -> Unit,
+    private val onDelete: (ActivityWithTask) -> Unit
 ) : ListAdapter<ActivityWithTask, ActivityListAdapter.VH>(DIFF) {
 
     inner class VH(val binding: ItemActivityBinding) : RecyclerView.ViewHolder(binding.root)
@@ -25,11 +26,12 @@ class ActivityListAdapter(
         val item = getItem(position)
         with(holder.binding) {
             val colorRes = ColorUtils.colorResForKey(item.task.colorKey)
-            viewActivityColor.background.setTint(ContextCompat.getColor(root.context, colorRes))
             tvActivityTaskName.text = item.task.name
+            tvActivityTaskName.setTextColor(ContextCompat.getColor(root.context, colorRes))
             tvActivityLevel.text = item.activity.successLevel.name.lowercase().replaceFirstChar { it.uppercase() }
             tvActivityTime.text = DateUtils.formatTime(item.activity.timestamp)
-            root.setOnClickListener { onClick(item) }
+            btnEdit.setOnClickListener { onEdit(item) }
+            btnDelete.setOnClickListener { onDelete(item) }
         }
     }
 

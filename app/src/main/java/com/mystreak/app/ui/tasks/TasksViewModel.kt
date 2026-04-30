@@ -2,11 +2,9 @@ package com.mystreak.app.ui.tasks
 
 import androidx.lifecycle.*
 import com.mystreak.app.data.model.Task
-import com.mystreak.app.data.model.TaskActivity
+import com.mystreak.app.data.model.TaskActivityStats
 import com.mystreak.app.data.repository.MyStreakRepository
-import com.mystreak.app.util.DateUtils
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 
 enum class TaskSortMode { ALPHABETICAL, RECENT, ACTIVITY_COUNT }
 
@@ -22,18 +20,24 @@ class TasksViewModel(private val repo: MyStreakRepository) : ViewModel() {
     private val _sortMode = MutableLiveData(TaskSortMode.ALPHABETICAL)
     val sortMode: LiveData<TaskSortMode> = _sortMode
 
-    val taskListItems: LiveData<List<TaskListItem>> = repo.getAllTasks()
-        .combine(sortMode.asFlow()) { tasks, sort -> Pair(tasks, sort) }
-        .map { (tasks, sort) -> buildItems(tasks, sort) }
-        .asLiveData()
+    private val _isAscending = MutableLiveData(true)
+    val isAscending: LiveData<Boolean> = _isAscending
 
-    private suspend fun buildItems(tasks: List<Task>, sort: TaskSortMode): List<TaskListItem> {
-        val (todayStart, todayEnd) = DateUtils.dayBounds(DateUtils.todayEpochDay())
-        return tasks.map { task ->
-            val allActivities = repo.getActivitiesForTask(task.id).first()
-            val todayCount = allActivities.count { it.timestamp in todayStart until todayEnd }
-            val lastTimestamp = allActivities.maxOfOrNull { it.timestamp }
-            TaskListItem(task, todayCount, lastTimestamp, allActivities.size)
+    val taskListItems: LiveData<List<TaskListItem>> =
+        combine(repo.getAllTasks(), repo.observeTaskActivityStats(), _sortMode.asFlow(), _isAscending.asFlow()) {
+            tasks, stats, sort, asc -> buildItems(tasks, stats, sort, asc)
+        }.asLiveData()
+
+    private fun buildItems(
+        tasks: List<Task>,
+        stats: List<TaskActivityStats>,
+        sort: TaskSortMode,
+        ascending: Boolean
+    ): List<TaskListItem> {
+        val statsMap = stats.associateBy { it.taskId }
+        val items = tasks.map { task ->
+            val s = statsMap[task.id]
+            TaskListItem(task, s?.todayCount ?: 0, s?.lastTimestamp, s?.totalCount ?: 0)
         }.sortedWith(
             when (sort) {
                 TaskSortMode.ALPHABETICAL -> compareBy { it.task.name.lowercase() }
@@ -41,9 +45,12 @@ class TasksViewModel(private val repo: MyStreakRepository) : ViewModel() {
                 TaskSortMode.ACTIVITY_COUNT -> compareByDescending { it.totalCount }
             }
         )
+        return if (ascending) items else items.reversed()
     }
 
     fun setSortMode(mode: TaskSortMode) { _sortMode.value = mode }
+
+    fun toggleSortDirection() { _isAscending.value = !(_isAscending.value ?: true) }
 
     companion object {
         fun factory(repo: MyStreakRepository): ViewModelProvider.Factory =

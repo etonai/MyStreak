@@ -23,17 +23,14 @@ class CalendarFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        calendarAdapter = CalendarDayAdapter { epochDay ->
-            DayActivitiesBottomSheet.newInstance(epochDay)
+        calendarAdapter = CalendarDayAdapter { epochDay, colorLevel ->
+            DayActivitiesBottomSheet.newInstance(epochDay, colorLevel.ordinal)
                 .show(childFragmentManager, "day_activities")
         }
 
-        // 7 columns for days of the week; each cell height matches its width
         val gridLayoutManager = GridLayoutManager(requireContext(), 7)
         binding.rvCalendar.layoutManager = gridLayoutManager
         binding.rvCalendar.adapter = calendarAdapter
-
-        // Make cells square via a custom ItemDecoration
         binding.rvCalendar.addItemDecoration(SquareCellDecoration())
 
         viewModel.monthLabel.observe(viewLifecycleOwner) { label ->
@@ -42,10 +39,14 @@ class CalendarFragment : Fragment() {
 
         viewModel.calendarCells.observe(viewLifecycleOwner) { cells ->
             calendarAdapter.submitList(cells)
-            // Refresh today's live color
             viewModel.refreshTodayColor { level ->
                 calendarAdapter.setTodayColor(level)
             }
+        }
+
+        viewModel.monthlyStats.observe(viewLifecycleOwner) { (activeDays, total) ->
+            binding.tvMonthlyActiveDays.text = activeDays.toString()
+            binding.tvMonthlyTotalActivities.text = total.toString()
         }
 
         binding.btnPrevMonth.setOnClickListener { viewModel.goToPreviousMonth() }
@@ -55,6 +56,7 @@ class CalendarFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         viewModel.refreshTodayColor { level -> calendarAdapter.setTodayColor(level) }
+        viewModel.refreshMonthlyStats()
     }
 
     override fun onDestroyView() {

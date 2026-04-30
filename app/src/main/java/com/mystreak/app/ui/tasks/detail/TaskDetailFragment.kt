@@ -35,9 +35,21 @@ class TaskDetailFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        historyAdapter = ActivityHistoryAdapter { activity ->
-            ActivityEditBottomSheet.newInstance(activity.id).show(childFragmentManager, "edit_activity")
-        }
+        historyAdapter = ActivityHistoryAdapter(
+            onEdit = { activity ->
+                ActivityEditBottomSheet.newInstance(activity.id).show(childFragmentManager, "edit_activity")
+            },
+            onDelete = { activity ->
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(R.string.delete_activity_title)
+                    .setMessage(R.string.delete_activity_message)
+                    .setPositiveButton(R.string.delete) { _, _ ->
+                        viewModel.deleteActivity(activity)
+                    }
+                    .setNegativeButton(R.string.cancel, null)
+                    .show()
+            }
+        )
         binding.rvActivityHistory.layoutManager = LinearLayoutManager(requireContext())
         binding.rvActivityHistory.adapter = historyAdapter
 

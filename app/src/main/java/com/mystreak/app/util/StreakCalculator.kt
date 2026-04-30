@@ -1,14 +1,12 @@
 package com.mystreak.app.util
 
-import com.mystreak.app.data.model.TaskActivity
-
 object StreakCalculator {
-    fun calculate(activities: List<TaskActivity>): Int {
-        if (activities.isEmpty()) return 0
+    fun calculate(timestamps: List<Long>): Int {
+        if (timestamps.isEmpty()) return 0
 
         val today = DateUtils.todayEpochDay()
-        val activeDays = activities
-            .map { DateUtils.timestampToEpochDay(it.timestamp) }
+        val activeDays = timestamps
+            .map { DateUtils.timestampToEpochDay(it) }
             .toSortedSet()
 
         // Streak must include today or yesterday to be active

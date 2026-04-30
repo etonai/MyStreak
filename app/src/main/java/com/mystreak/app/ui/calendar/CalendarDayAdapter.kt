@@ -1,8 +1,12 @@
 package com.mystreak.app.ui.calendar
 
+import android.content.Context
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,7 +15,7 @@ import com.mystreak.app.data.model.CalendarColorLevel
 import com.mystreak.app.databinding.ItemCalendarDayBinding
 
 class CalendarDayAdapter(
-    private val onDayClick: (Long) -> Unit
+    private val onDayClick: (Long, CalendarColorLevel) -> Unit
 ) : ListAdapter<CalendarCell, CalendarDayAdapter.VH>(DIFF) {
 
     private var todayColor: CalendarColorLevel = CalendarColorLevel.NONE
@@ -27,36 +31,44 @@ class CalendarDayAdapter(
         with(holder.binding) {
             if (cell.epochDay == -1L) {
                 tvDayNumber.text = ""
-                viewDayBg.setBackgroundColor(0)
+                ViewCompat.setBackgroundTintList(viewDayBg, null)
                 root.isClickable = false
-                viewTodayRing.visibility = android.view.View.GONE
+                viewTodayRing.visibility = View.GONE
                 return
             }
 
             tvDayNumber.text = cell.dayOfMonth.toString()
             val effectiveColor = if (cell.isToday) todayColor else cell.colorLevel
-            viewDayBg.setBackgroundColor(colorForLevel(root, effectiveColor))
-            viewTodayRing.visibility = if (cell.isToday) android.view.View.VISIBLE else android.view.View.GONE
+            val colorInt = colorForLevel(root.context, effectiveColor)
+            if (colorInt == 0) {
+                ViewCompat.setBackgroundTintList(viewDayBg, null)
+            } else {
+                ViewCompat.setBackgroundTintList(viewDayBg, ColorStateList.valueOf(colorInt))
+            }
+            viewTodayRing.visibility = if (cell.isToday) View.VISIBLE else View.GONE
             root.isClickable = true
-            root.setOnClickListener { onDayClick(cell.epochDay) }
+            root.setOnClickListener {
+                val clickedColor = if (cell.isToday) todayColor else cell.colorLevel
+                onDayClick(cell.epochDay, clickedColor)
+            }
         }
     }
 
     fun setTodayColor(level: CalendarColorLevel) {
+        if (todayColor == level) return
         todayColor = level
-        notifyDataSetChanged()
+        val idx = currentList.indexOfFirst { it.isToday }
+        if (idx >= 0) notifyItemChanged(idx)
     }
 
-    private fun colorForLevel(view: android.view.View, level: CalendarColorLevel): Int {
-        val ctx = view.context
-        return when (level) {
+    private fun colorForLevel(context: Context, level: CalendarColorLevel): Int =
+        when (level) {
             CalendarColorLevel.NONE -> 0
-            CalendarColorLevel.LIGHT_BLUE -> ContextCompat.getColor(ctx, R.color.calendar_light_blue)
-            CalendarColorLevel.MEDIUM_BLUE -> ContextCompat.getColor(ctx, R.color.calendar_medium_blue)
-            CalendarColorLevel.DARK_BLUE -> ContextCompat.getColor(ctx, R.color.calendar_dark_blue)
-            CalendarColorLevel.BRIGHT_GREEN -> ContextCompat.getColor(ctx, R.color.calendar_bright_green)
+            CalendarColorLevel.LIGHT_BLUE -> ContextCompat.getColor(context, R.color.calendar_light_blue)
+            CalendarColorLevel.MEDIUM_BLUE -> ContextCompat.getColor(context, R.color.calendar_medium_blue)
+            CalendarColorLevel.DARK_BLUE -> ContextCompat.getColor(context, R.color.calendar_dark_blue)
+            CalendarColorLevel.BRIGHT_GREEN -> ContextCompat.getColor(context, R.color.calendar_bright_green)
         }
-    }
 
     companion object {
         val DIFF = object : DiffUtil.ItemCallback<CalendarCell>() {

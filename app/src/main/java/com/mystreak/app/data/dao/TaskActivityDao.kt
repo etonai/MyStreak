@@ -3,6 +3,7 @@ package com.mystreak.app.data.dao
 import androidx.room.*
 import com.mystreak.app.data.model.ActivityWithTask
 import com.mystreak.app.data.model.TaskActivity
+import com.mystreak.app.data.model.TaskActivityStats
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -52,6 +53,22 @@ interface TaskActivityDao {
 
     @Query("SELECT COUNT(*) FROM activities WHERE taskId IN (SELECT id FROM tasks WHERE isActive = 1 AND priority = 'HIGH') AND timestamp >= :start AND timestamp < :end")
     suspend fun countActiveHighPriorityActivitiesInRange(start: Long, end: Long): Int
+
+    @Query("SELECT timestamp FROM activities WHERE timestamp >= :start AND timestamp < :end")
+    suspend fun getTimestampsInRange(start: Long, end: Long): List<Long>
+
+    @Query("""
+        SELECT taskId,
+            COUNT(*) AS totalCount,
+            MAX(timestamp) AS lastTimestamp,
+            SUM(CASE WHEN timestamp >= :todayStart AND timestamp < :todayEnd THEN 1 ELSE 0 END) AS todayCount
+        FROM activities
+        GROUP BY taskId
+    """)
+    fun observeTaskActivityStats(todayStart: Long, todayEnd: Long): Flow<List<TaskActivityStats>>
+
+    @Query("SELECT timestamp FROM activities ORDER BY timestamp ASC")
+    suspend fun getAllTimestampsOnce(): List<Long>
 
     @Query("SELECT * FROM activities ORDER BY timestamp ASC")
     suspend fun getAllOnce(): List<TaskActivity>

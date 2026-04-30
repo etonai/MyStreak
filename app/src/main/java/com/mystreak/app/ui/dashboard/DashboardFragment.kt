@@ -76,12 +76,36 @@ class DashboardFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        todayAdapter = ActivityListAdapter { awt ->
-            ActivityEditBottomSheet.newInstance(awt.activity.id).show(childFragmentManager, "edit_activity")
-        }
-        yesterdayAdapter = ActivityListAdapter { awt ->
-            ActivityEditBottomSheet.newInstance(awt.activity.id).show(childFragmentManager, "edit_activity")
-        }
+        todayAdapter = ActivityListAdapter(
+            onEdit = { awt ->
+                ActivityEditBottomSheet.newInstance(awt.activity.id).show(childFragmentManager, "edit_activity")
+            },
+            onDelete = { awt ->
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(R.string.delete_activity_title)
+                    .setMessage(R.string.delete_activity_message)
+                    .setPositiveButton(R.string.delete) { _, _ ->
+                        lifecycleScope.launch { repo.deleteActivity(awt.activity) }
+                    }
+                    .setNegativeButton(R.string.cancel, null)
+                    .show()
+            }
+        )
+        yesterdayAdapter = ActivityListAdapter(
+            onEdit = { awt ->
+                ActivityEditBottomSheet.newInstance(awt.activity.id).show(childFragmentManager, "edit_activity")
+            },
+            onDelete = { awt ->
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(R.string.delete_activity_title)
+                    .setMessage(R.string.delete_activity_message)
+                    .setPositiveButton(R.string.delete) { _, _ ->
+                        lifecycleScope.launch { repo.deleteActivity(awt.activity) }
+                    }
+                    .setNegativeButton(R.string.cancel, null)
+                    .show()
+            }
+        )
         outstandingAdapter = HighPriorityAdapter { task ->
             LogActivityBottomSheet.newInstance(task.id).show(childFragmentManager, "log_activity")
         }
@@ -111,7 +135,6 @@ class DashboardFragment : Fragment() {
         }
         viewModel.outstandingTasks.observe(viewLifecycleOwner) { tasks ->
             outstandingAdapter.submitList(tasks)
-            binding.tvOutstandingHeader.isVisible = tasks.isNotEmpty()
             binding.tvOutstandingDone.isVisible = tasks.isEmpty()
             binding.rvOutstanding.isVisible = tasks.isNotEmpty()
         }

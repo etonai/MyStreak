@@ -33,7 +33,7 @@ class DashboardViewModel(private val repo: MyStreakRepository) : ViewModel() {
 
     fun refresh() {
         viewModelScope.launch {
-            _streak.value = StreakCalculator.calculate(repo.getAllActivitiesOnce())
+            _streak.value = StreakCalculator.calculate(repo.getAllTimestampsOnce())
             _weekSummary.value = repo.getWeekSummaryCounts()
             _outstandingTasks.value = repo.getActiveHighPriorityOutstandingTasks()
         }

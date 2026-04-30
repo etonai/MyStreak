@@ -19,6 +19,10 @@ class TaskDetailViewModel(private val repo: MyStreakRepository, private val task
         }
     }
 
+    fun deleteActivity(activity: com.mystreak.app.data.model.TaskActivity) {
+        viewModelScope.launch { repo.deleteActivity(activity) }
+    }
+
     fun deleteTask(onDeleted: () -> Unit) {
         viewModelScope.launch {
             val t = repo.getTaskByIdOnce(taskId) ?: return@launch

@@ -53,6 +53,14 @@ class TasksFragment : Fragment() {
             }
         }
 
+        binding.btnSortDirection.setOnClickListener {
+            viewModel.toggleSortDirection()
+        }
+
+        viewModel.isAscending.observe(viewLifecycleOwner) { ascending ->
+            binding.btnSortDirection.text = if (ascending) "↑" else "↓"
+        }
+
         binding.fabAddTask.setOnClickListener {
             val action = TasksFragmentDirections.actionTasksToAddEditTask(-1L)
             findNavController().navigate(action)

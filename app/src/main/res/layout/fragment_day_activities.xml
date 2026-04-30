@@ -5,13 +5,29 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <TextView
-        android:id="@+id/tv_day_title"
-        android:layout_width="wrap_content"
+    <!-- Header row: color indicator dot + date label -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
-        android:textSize="18sp"
-        android:textStyle="bold" />
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <View
+            android:id="@+id/view_color_indicator"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/circle_indicator"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_day_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?attr/textAppearanceHeadline6" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tv_no_day_activities"
