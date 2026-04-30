@@ -1,48 +1,43 @@
-# Project Template
+# MyStreak
 
-This repository is a lightweight starting point for new projects.
+An Android app for tracking recurring personal activities and maintaining streaks.
 
-It is intended to provide a small amount of durable project structure without adding placeholder files that need to be cleaned up later.
+## What it does
 
-## Purpose
+MyStreak helps you build habits by tracking **Tasks** (things you do repeatedly) and **Activities** (individual instances of performing a Task). The app is built around daily accountability and streak motivation.
 
-This template is meant to give new projects:
+- **Dashboard** — At-a-glance view of your current streak, today's and yesterday's logged activities, a 7-day rolling week summary, and a list of high-priority tasks you haven't done yet today.
+- **Calendar** — Visual history of daily activity intensity, color-coded from light blue (any activity) to bright green (all high-priority tasks completed).
+- **Tasks** — Manage your task list. Each task has a name, color, priority (High/Low), and three success threshold descriptions (Minimum / Medium / High) that you define yourself.
 
-- a standard project context entry point in `AGENTS.md`
-- compatibility with workflows that use `CLAUDE.md` as a project context file
-- a lightweight planning workflow in `doc/planning/DevelopmentProcess.md`
-- a default `DevCycleTemplate.md` that projects may keep or adjust
-- a clean foundation that can be adapted without unnecessary template residue
+## Key behaviors
 
-## Agent Context Standard
+- Each task can be logged multiple times per day. Each log is a separate Activity with its own timestamp and success level.
+- Activities can be edited after logging (date/time and success level). Date editing is constrained to today or earlier.
+- Calendar colors for past days are frozen at midnight and not recalculated by subsequent edits.
+- Tasks can be made inactive without deleting their history. Inactive tasks are greyed out in the task list.
+- Data is stored locally on the device. JSON import/export is supported.
+- Dark mode is supported.
 
-`AGENTS.md` is intended to be the standard first-read document for agents with little or no project context.
+## Tech stack
 
-When starting work in a project created from this template, users should direct agents to read `AGENTS.md` first.
+- **Language:** Kotlin
+- **Architecture:** MVVM with LiveData
+- **Database:** Room
+- **Navigation:** AndroidX Navigation Component with Safe Args
+- **UI:** Material 3, ViewBinding
+- **Min SDK:** 24 (Android 7.0)
+- **Target SDK:** 36
 
-This is intended to be the standard across all projects created from this template.
+## Building
 
-## Important
+Open the project in Android Studio and press Run, or from the command line:
 
-When you create a real project from this template, you should replace this `README.md` with a project-specific README.
+```bash
+./gradlew assembleDebug
+./gradlew installDebug
+```
 
-This is the one document in the template that is expected to be fully overwritten for the new project.
+## License
 
-## Getting Started
-
-After creating a new project from this template:
-
-1. Overwrite `README.md` with the actual project description.
-2. Tell agents with no context to read `AGENTS.md` before starting work.
-3. Update `AGENTS.md` with project-specific context as needed.
-4. Review `DevCycleTemplate.md` and keep it as-is or adjust it for the new project.
-5. If your workflow uses `CLAUDE.md`, keep it aligned with `AGENTS.md` or adapt as needed for Claude Code.
-6. Continue using `doc/planning/DevelopmentProcess.md` as the basis for planning and execution.
-
-## Project Owner Responsibility
-
-The template includes a `DevCycleTemplate.md` file for new projects to use as a starting point.
-
-The project owner may keep that template as-is or adjust it to better fit the project's planning style.
-
-`doc/planning/DevelopmentProcess.md` describes how DevCycle documents are used, while `DevCycleTemplate.md` provides the default starting structure.
+MIT — see [LICENSE](LICENSE).

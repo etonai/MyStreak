@@ -40,8 +40,11 @@ class DashboardViewModel(private val repo: MyStreakRepository) : ViewModel() {
     }
 
     companion object {
-        fun factory(repo: MyStreakRepository) = viewModelFactory {
-            initializer { DashboardViewModel(repo) }
-        }
+        fun factory(repo: MyStreakRepository): ViewModelProvider.Factory =
+            object : ViewModelProvider.Factory {
+                @Suppress("UNCHECKED_CAST")
+                override fun <T : ViewModel> create(modelClass: Class<T>): T =
+                    DashboardViewModel(repo) as T
+            }
     }
 }

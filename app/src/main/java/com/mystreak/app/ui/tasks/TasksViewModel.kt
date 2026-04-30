@@ -46,8 +46,11 @@ class TasksViewModel(private val repo: MyStreakRepository) : ViewModel() {
     fun setSortMode(mode: TaskSortMode) { _sortMode.value = mode }
 
     companion object {
-        fun factory(repo: MyStreakRepository) = viewModelFactory {
-            initializer { TasksViewModel(repo) }
-        }
+        fun factory(repo: MyStreakRepository): ViewModelProvider.Factory =
+            object : ViewModelProvider.Factory {
+                @Suppress("UNCHECKED_CAST")
+                override fun <T : ViewModel> create(modelClass: Class<T>): T =
+                    TasksViewModel(repo) as T
+            }
     }
 }

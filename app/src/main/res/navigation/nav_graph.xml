@@ -50,7 +50,7 @@
         tools:layout="@layout/fragment_add_edit_task">
         <argument
             android:name="taskId"
-            android:defaultValue="-1"
+            android:defaultValue="-1L"
             app:argType="long" />
     </fragment>
 

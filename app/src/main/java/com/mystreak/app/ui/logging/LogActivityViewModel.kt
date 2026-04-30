@@ -68,8 +68,11 @@ class LogActivityViewModel(private val repo: MyStreakRepository, preselectedTask
     }
 
     companion object {
-        fun factory(repo: MyStreakRepository, preselectedTaskId: Long) = viewModelFactory {
-            initializer { LogActivityViewModel(repo, preselectedTaskId) }
-        }
+        fun factory(repo: MyStreakRepository, preselectedTaskId: Long): ViewModelProvider.Factory =
+            object : ViewModelProvider.Factory {
+                @Suppress("UNCHECKED_CAST")
+                override fun <T : ViewModel> create(modelClass: Class<T>): T =
+                    LogActivityViewModel(repo, preselectedTaskId) as T
+            }
     }
 }

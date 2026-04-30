@@ -37,8 +37,11 @@ class AddEditTaskViewModel(private val repo: MyStreakRepository, private val tas
     }
 
     companion object {
-        fun factory(repo: MyStreakRepository, taskId: Long) = viewModelFactory {
-            initializer { AddEditTaskViewModel(repo, taskId) }
-        }
+        fun factory(repo: MyStreakRepository, taskId: Long): ViewModelProvider.Factory =
+            object : ViewModelProvider.Factory {
+                @Suppress("UNCHECKED_CAST")
+                override fun <T : ViewModel> create(modelClass: Class<T>): T =
+                    AddEditTaskViewModel(repo, taskId) as T
+            }
     }
 }

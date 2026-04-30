@@ -50,8 +50,11 @@ class ActivityEditViewModel(private val repo: MyStreakRepository, private val ac
     }
 
     companion object {
-        fun factory(repo: MyStreakRepository, activityId: Long) = viewModelFactory {
-            initializer { ActivityEditViewModel(repo, activityId) }
-        }
+        fun factory(repo: MyStreakRepository, activityId: Long): ViewModelProvider.Factory =
+            object : ViewModelProvider.Factory {
+                @Suppress("UNCHECKED_CAST")
+                override fun <T : ViewModel> create(modelClass: Class<T>): T =
+                    ActivityEditViewModel(repo, activityId) as T
+            }
     }
 }

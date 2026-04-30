@@ -84,8 +84,11 @@ class CalendarViewModel(private val repo: MyStreakRepository) : ViewModel() {
     }
 
     companion object {
-        fun factory(repo: MyStreakRepository) = viewModelFactory {
-            initializer { CalendarViewModel(repo) }
-        }
+        fun factory(repo: MyStreakRepository): ViewModelProvider.Factory =
+            object : ViewModelProvider.Factory {
+                @Suppress("UNCHECKED_CAST")
+                override fun <T : ViewModel> create(modelClass: Class<T>): T =
+                    CalendarViewModel(repo) as T
+            }
     }
 }
